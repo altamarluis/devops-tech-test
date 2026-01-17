@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/altamarluis/devops-tech-test/compare/v1.1.0...v1.2.0) (2026-01-17)
+
+
+### Features
+
+* connect github issue to ia agent ([df8105c](https://github.com/altamarluis/devops-tech-test/commit/df8105c43351abf79e210867416c918705bbbca0))
+
 # [1.1.0](https://github.com/altamarluis/devops-tech-test/compare/v1.0.0...v1.1.0) (2026-01-17)
 
 
