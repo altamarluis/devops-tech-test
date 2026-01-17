@@ -1,0 +1,80 @@
+name: Multi-Environment Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-dev:
+    name: Deploy to Development
+    runs-on: windows-latest
+    environment: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy application
+        shell: pwsh
+        run: |
+          Write-Output "Deploying to DEV environment"
+          Write-Output "Version: $env:GITHUB_SHA"
+
+      - name: Post-deploy validation
+        shell: pwsh
+        run: |
+          Write-Output "Running DEV validations"
+          exit 0
+
+  deploy-qa:
+    name: Deploy to QA
+    runs-on: windows-latest
+    needs: deploy-dev
+    environment: qa
+
+    steps:
+      - name: Deploy application
+        shell: pwsh
+        run: |
+          Write-Output "Deploying to QA environment"
+
+      - name: Post-deploy validation
+        shell: pwsh
+        run: |
+          Write-Output "Running QA validations"
+          exit 0
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: windows-latest
+    needs: deploy-qa
+    environment: staging
+
+    steps:
+      - name: Deploy application
+        shell: pwsh
+        run: |
+          Write-Output "Deploying to STAGING environment"
+
+      - name: Post-deploy validation
+        shell: pwsh
+        run: |
+          Write-Output "Running STAGING validations"
+          exit 0
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: windows-latest
+    needs: deploy-staging
+    environment: production
+
+    steps:
+      - name: Deploy application
+        shell: pwsh
+        run: |
+          Write-Output "Deploying to PRODUCTION environment"
