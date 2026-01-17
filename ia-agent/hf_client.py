@@ -1,6 +1,7 @@
 import os
 import requests
 
+print("TOKEN PRESENT:", bool(os.getenv("HF_API_TOKEN")))
 HF_TOKEN = os.getenv("HF_API_TOKEN")
 
 API_URL = "https://router.huggingface.co/v1/chat/completions"
