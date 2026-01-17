@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/altamarluis/devops-tech-test/compare/v1.0.0...v1.1.0) (2026-01-17)
+
+
+### Features
+
+* add multi-environment deployment pipeline ([4107933](https://github.com/altamarluis/devops-tech-test/commit/4107933c6951f1c31cb7ce3227e23986f8590171))
+
 # 1.0.0 (2026-01-17)
 
 
