@@ -25,4 +25,7 @@ jobs:
       - name: Run agent
         env:
           HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: python ia-agent/agent.py
