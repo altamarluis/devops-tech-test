@@ -3,4 +3,4 @@ uvicorn
 pytest
 httpx
 requests
-
+PyGithub
