@@ -29,7 +29,8 @@ def analyze(prompt: str) -> str:
         json=payload,
         timeout=60
     )
-
+    print("HF STATUS:", response.status_code)
+    print("HF TEXT:", response.text)
     response.raise_for_status()
 
     result = response.json()
