@@ -4,6 +4,11 @@ on:
   issues:
     types: [labeled]
 
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
 jobs:
   ia-agent:
     if: github.event.label.name == 'send-to-ia'
