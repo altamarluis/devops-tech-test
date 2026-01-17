@@ -1,0 +1,28 @@
+name: IA Agent (HF Test)
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  ia-agent:
+    if: github.event.label.name == 'send-to-ia'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r ia-agent/requirements.txt
+
+      - name: Run agent
+        env:
+          HF_API_TOKEN: ${{ secrets.HF_API_TOKEN }}
+        run: python ia-agent/agent.py
