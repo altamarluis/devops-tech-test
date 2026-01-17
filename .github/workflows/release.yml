@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Semantic Release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # IMPORTANTE para semantic-release
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install semantic-release
+        shell: pwsh
+        run: |
+          npm install -g semantic-release `
+            @semantic-release/commit-analyzer `
+            @semantic-release/release-notes-generator `
+            @semantic-release/changelog `
+            @semantic-release/git `
+            @semantic-release/github
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          semantic-release
