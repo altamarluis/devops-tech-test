@@ -14,56 +14,75 @@ g = Github(gh_token)
 repo = g.get_repo(repo_name)
 issue = repo.get_issue(number=issue_number)
 
-# Extract target file from issue body
-match = re.search(r"file:\s*(.+)", issue.body)
-if not match:
-    raise Exception("No file specified in issue. Use: file: path/to/file.py")
+# Extract multiple files from issue body
+files_section = re.search(r"files:\s*((?:- .+\n?)*)", issue.body)
+if not files_section:
+    raise Exception("No files specified. Use:\nfiles:\n- path/to/file.py")
 
-target_file = match.group(1).strip()
+files = [
+    line.replace("-", "").strip()
+    for line in files_section.group(1).splitlines()
+    if line.strip()
+]
 
-if not os.path.exists(target_file):
-    raise Exception(f"File not found: {target_file}")
+# Read all files
+files_content = ""
+for path in files:
+    if not os.path.exists(path):
+        raise Exception(f"File not found: {path}")
 
-# Read current file content
-with open(target_file, "r") as f:
-    current_code = f.read()
+    with open(path, "r") as f:
+        files_content += f"\nFILE: {path}\n"
+        files_content += f.read()
+        files_content += "\n"
 
 # Prompt for IA
 prompt = f"""
 You are a senior Python developer.
 
-The following file contains a bug.
+The following files contain a bug.
 
-File path:
-{target_file}
-
-Current code:
-{current_code}
+{files_content}
 
 Bug description:
 {issue.body}
 
-Return ONLY the full corrected content of the file.
+Return ONLY the full corrected content for EACH file.
+Use EXACTLY this format:
+
+FILE: path/to/file.py
+<code>
+
+FILE: path/to/other.py
+<code>
+
 Do not add explanations.
 """
 
 fixed_code = analyze(prompt)
 
-# Clean markdown if present
-fixed_code = fixed_code.replace("```python", "").replace("```", "").strip()
+# Parse IA response
+pattern = r"FILE:\s*(.+?)\n([\s\S]*?)(?=FILE:|$)"
+matches = re.findall(pattern, fixed_code)
 
-# Minimal validation
-if len(fixed_code.strip()) < 20:
-    raise Exception("IA returned empty or invalid code")
+if not matches:
+    raise Exception("IA did not return files in expected format")
 
-# Write corrected file
-with open(target_file, "w") as f:
-    f.write(fixed_code)
+written_files = []
+
+for path, content in matches:
+    path = path.strip()
+    content = content.replace("```python", "").replace("```", "").strip()
+
+    with open(path, "w") as f:
+        f.write(content)
+
+    written_files.append(path)
 
 # Git operations
 branch = f"bugfix/ia-{issue_number}"
 subprocess.run(["git", "checkout", "-b", branch], check=True)
-subprocess.run(["git", "add", target_file], check=True)
+subprocess.run(["git", "add"] + written_files, check=True)
 subprocess.run(
     ["git", "commit", "-m", f"fix: ia fix for bug #{issue_number}"],
     check=True
@@ -75,7 +94,7 @@ subprocess.run(
 # Create Pull Request
 pr = repo.create_pull(
     title=f"IA fix for bug #{issue_number}",
-    body=f"Auto-generated fix for `{target_file}`",
+    body=f"Auto-generated fix for files:\n" + "\n".join(written_files),
     head=branch,
     base="main"
 )
