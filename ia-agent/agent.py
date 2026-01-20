@@ -68,8 +68,10 @@ subprocess.run(
     ["git", "commit", "-m", f"fix: ia fix for bug #{issue_number}"],
     check=True
 )
-subprocess.run(["git", "push", "origin", branch], check=True)
-
+subprocess.run(
+    ["git", "push", "--force-with-lease", "origin", branch],
+    check=True
+)
 # Create Pull Request
 pr = repo.create_pull(
     title=f"IA fix for bug #{issue_number}",
