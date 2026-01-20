@@ -49,6 +49,9 @@ Do not add explanations.
 
 fixed_code = analyze(prompt)
 
+# Clean markdown if present
+fixed_code = fixed_code.replace("```python", "").replace("```", "").strip()
+
 # Minimal validation
 if len(fixed_code.strip()) < 20:
     raise Exception("IA returned empty or invalid code")
