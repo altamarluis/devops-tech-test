@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.services import add_numbers
+from app.services import subtract_numbers
 
 app = FastAPI(title="DevOps Automation Test App")
 
@@ -7,7 +7,7 @@ app = FastAPI(title="DevOps Automation Test App")
 def health():
     return {"status": "ok"}
 
-@app.get("/add")
-def add(a: int, b: int):
-    result = add_numbers(a, b)
+@app.get("/subtract")
+def subtract(a: int, b: int):
+    result = subtract_numbers(a, b)
     return {"result": result}
