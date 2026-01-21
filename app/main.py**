@@ -1,0 +1,16 @@
+from fastapi import FastAPI
+from app.services import subtract_numbers  # Change function name to subtract_numbers
+
+app = FastAPI(title="DevOps Automation Test App")
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+@app.get("/subtract")  # Rename the endpoint to reflect the operation
+def subtract(a: int, b: int):
+    result = subtract_numbers(a, b)  # Call the new function
+    return {"result": result}
+
+
+**

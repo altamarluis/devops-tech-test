@@ -1,0 +1,2 @@
+def subtract_numbers(a: int, b: int) -> int:  # Rename the function to subtract_numbers
+    return a - b
