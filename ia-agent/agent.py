@@ -1,7 +1,7 @@
 import os
 import re
 import subprocess
-from github import Github
+from github import Github, Auth
 from hf_client import analyze
 
 # Environment variables
@@ -10,7 +10,8 @@ issue_number = int(os.getenv("ISSUE_NUMBER"))
 gh_token = os.getenv("GITHUB_TOKEN")
 
 # GitHub client
-g = Github(gh_token)
+auth = Auth.Token(gh_token)
+g = Github(auth=auth)
 repo = g.get_repo(repo_name)
 issue = repo.get_issue(number=issue_number)
 
