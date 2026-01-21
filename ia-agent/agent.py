@@ -14,8 +14,11 @@ g = Github(gh_token)
 repo = g.get_repo(repo_name)
 issue = repo.get_issue(number=issue_number)
 
+# Detect bug type
+is_frontend = "type: frontend" in issue.body.lower()
+
 # Extract multiple files from issue body
-files_section = re.search(r"files:\s*((?:- .+\n?)*)", issue.body)
+files_section = re.search(r"files:\s*((?:- .+\n?)*)", issue.body, re.IGNORECASE)
 if not files_section:
     raise Exception("No files specified. Use:\nfiles:\n- path/to/file.py")
 
@@ -36,6 +39,16 @@ for path in files:
         files_content += f.read()
         files_content += "\n"
 
+# Visual context (only frontend)
+visual_context = "No visual context"
+if is_frontend:
+    os.makedirs("ia-artifacts", exist_ok=True)
+    subprocess.run(["python", "ia-agent/capture_ui.py"], check=True)
+
+    if os.path.exists("ia-artifacts/screenshot.png"):
+        from vision_agent import analyze_image
+        visual_context = analyze_image("ia-artifacts/screenshot.png")
+
 # Prompt for IA
 prompt = f"""
 You are a senior Python developer.
@@ -46,6 +59,9 @@ The following files contain a bug.
 
 Bug description:
 {issue.body}
+
+Visual context from UI screenshot:
+{visual_context}
 
 Return TWO sections in this EXACT format:
 
@@ -118,7 +134,15 @@ subprocess.run(
 # Create Pull Request
 pr = repo.create_pull(
     title=f"IA fix for bug #{issue_number}",
-    body=f"Auto-generated fix for files:\n" + "\n".join(written_files),
+    body=f"""Auto-generated fix.
+
+Files modified:
+{chr(10).join(written_files)}
+
+Visual analysis applied: {is_frontend}
+
+See ia-report/bug-{issue_number}.md for technical explanation.
+""",
     head=branch,
     base="main"
 )
