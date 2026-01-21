@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/altamarluis/devops-tech-test/compare/v1.5.1...v1.6.0) (2026-01-21)
+
+
+### Features
+
+* visual analisis ([a384c7f](https://github.com/altamarluis/devops-tech-test/commit/a384c7f7f80e851bbc42a7f3db424e2b176296d6))
+
 ## [1.5.1](https://github.com/altamarluis/devops-tech-test/compare/v1.5.0...v1.5.1) (2026-01-21)
 
 
