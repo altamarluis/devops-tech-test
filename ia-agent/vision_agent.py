@@ -11,18 +11,23 @@ headers = {
 }
 
 def analyze_image(image_path: str) -> str:
-    # Leer y convertir imagen a base64
+    if not HF_TOKEN:
+        raise Exception("HF_API_TOKEN not set")
+
+    if not os.path.exists(image_path):
+        raise Exception(f"Image not found: {image_path}")
+    
+    # Read image and encode as base64
     with open(image_path, "rb") as f:
         image_data = base64.b64encode(f.read()).decode('utf-8')
     
-    # Usar un modelo de visión que SÍ funciona
     payload = {
-        "model": "Qwen/Qwen2.5-VL-7B-Instruct:hyperbolic",  # Este modelo SÍ funciona
+        "model": "Qwen/Qwen2.5-VL-7B-Instruct:hyperbolic",
         "messages": [
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": "Describe this image in detail."},
+                    {"type": "text", "text": "Analyze this frontend screenshot and describe any visible UI or layout."},
                     {
                         "type": "image_url",
                         "image_url": {"url": f"data:image/jpeg;base64,{image_data}"}
@@ -33,18 +38,17 @@ def analyze_image(image_path: str) -> str:
         "max_tokens": 500
     }
     
-    response = requests.post(API_URL, headers=headers, json=payload)
+    response = requests.post(API_URL, headers=headers, json=payload, timeout=60)
     
     print(f"Status: {response.status_code}")
     print(f"Response: {response.text}")
     
-    if response.status_code == 200:
-        result = response.json()
-        return result['choices'][0]['message']['content']
-    else:
-        raise Exception(f"Error: {response.status_code} - {response.text}")
+    response.raise_for_status()
 
+    result = response.json()
 
-# Uso
-descripcion = analyze_image("cat.png")
-print(descripcion)
+    # Defensive parsing (important for LLMs)
+    try:
+        return result["choices"][0]["message"]["content"]
+    except (KeyError, IndexError):
+        raise Exception(f"Unexpected HF response format: {result}")
