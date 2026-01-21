@@ -112,7 +112,7 @@ subprocess.run(
     check=True
 )
 subprocess.run(
-    ["git", "push", "--force-with-lease", "origin", branch],
+    ["git", "push", "--force", "origin", branch],
     check=True
 )
 # Create Pull Request
