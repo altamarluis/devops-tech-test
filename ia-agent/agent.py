@@ -47,23 +47,32 @@ The following files contain a bug.
 Bug description:
 {issue.body}
 
-Return ONLY the full corrected content for EACH file.
-Use EXACTLY this format:
+Return TWO sections in this EXACT format:
 
+=== FIXED FILES ===
 FILE: path/to/file.py
 <code>
 
 FILE: path/to/other.py
 <code>
 
-Do not add explanations.
+=== TECHNICAL EXPLANATION ===
+<markdown explanation>
 """
 
-fixed_code = analyze(prompt)
+response = analyze(prompt)
 
-# Parse IA response
+# Split response
+parts = response.split("=== TECHNICAL EXPLANATION ===")
+if len(parts) != 2:
+    raise Exception("IA response missing technical explanation")
+
+files_part = parts[0].replace("=== FIXED FILES ===", "").strip()
+explanation = parts[1].strip()
+
+# Parse fixed files
 pattern = r"FILE:\s*(.+?)\n([\s\S]*?)(?=FILE:|$)"
-matches = re.findall(pattern, fixed_code)
+matches = re.findall(pattern, files_part)
 
 if not matches:
     raise Exception("IA did not return files in expected format")
@@ -79,12 +88,19 @@ for path, content in matches:
 
     written_files.append(path)
 
+# Write technical report
+os.makedirs("ia-report", exist_ok=True)
+report_path = f"ia-report/bug-{issue_number}.md"
+
+with open(report_path, "w") as f:
+    f.write(explanation)
+
 # Git operations
 branch = f"bugfix/ia-{issue_number}"
 subprocess.run(["git", "checkout", "-b", branch], check=True)
-subprocess.run(["git", "add"] + written_files, check=True)
+subprocess.run(["git", "add"] + written_files + [report_path], check=True)
 subprocess.run(
-    ["git", "commit", "-m", f"fix: ia fix for bug #{issue_number}"],
+    ["git", "commit", "-m", f"fix: ia fix with technical report for bug #{issue_number}"],
     check=True
 )
 subprocess.run(

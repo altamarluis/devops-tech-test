@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Health Check</title>
+</head>
+<body>
+  <h1>App Status</h1>
+  <button onclick="check()">Check health</button>
+  <p id="result"></p>
+
+  <script>
+    async function check() {
+      const r = await fetch("/health");
+      const data = await r.json();
+      document.getElementById("result").innerText = data.status;
+    }
+  </script>
+</body>
+</html>
