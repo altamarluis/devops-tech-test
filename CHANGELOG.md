@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/altamarluis/devops-tech-test/compare/v1.6.3...v1.6.4) (2026-01-21)
+
+
+### Bug Fixes
+
+* minor fixes ([b2020ec](https://github.com/altamarluis/devops-tech-test/commit/b2020ec9eace85efa9e6f3885e59ec0b2d1ab818))
+
 ## [1.6.3](https://github.com/altamarluis/devops-tech-test/compare/v1.6.2...v1.6.3) (2026-01-21)
 
 
