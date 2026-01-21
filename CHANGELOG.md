@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/altamarluis/devops-tech-test/compare/v1.3.0...v1.4.0) (2026-01-20)
+
+
+### Features
+
+* support multi-file analysis and fixes by ia agent ([ec214de](https://github.com/altamarluis/devops-tech-test/commit/ec214de1c32db272e3a5230d0c1dcf729dc69bd5))
+
 # [1.3.0](https://github.com/altamarluis/devops-tech-test/compare/v1.2.0...v1.3.0) (2026-01-17)
 
 
