@@ -62,13 +62,21 @@ FILE: path/to/other.py
 
 response = analyze(prompt)
 
-# Split response
-parts = response.split("=== TECHNICAL EXPLANATION ===")
-if len(parts) != 2:
-    raise Exception("IA response missing technical explanation")
+# Normalize response (robust parsing)
+normalized = response.replace("###", "").replace("===", "").strip()
 
-files_part = parts[0].replace("=== FIXED FILES ===", "").strip()
-explanation = parts[1].strip()
+# Split response
+split_match = re.split(
+    r"TECHNICAL EXPLANATION",
+    normalized,
+    flags=re.IGNORECASE
+)
+
+if len(split_match) != 2:
+    raise Exception("IA response missing technical explanation section")
+
+files_part = split_match[0].replace("FIXED FILES", "").strip()
+explanation = split_match[1].strip()
 
 # Parse fixed files
 pattern = r"FILE:\s*(.+?)\n([\s\S]*?)(?=FILE:|$)"
