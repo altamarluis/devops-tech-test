@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/altamarluis/devops-tech-test/compare/v1.5.0...v1.5.1) (2026-01-21)
+
+
+### Bug Fixes
+
+* allow forced push for ia-generated branches ([ad6c6e6](https://github.com/altamarluis/devops-tech-test/commit/ad6c6e6df2a7a51cd1f6363e00bca2c3e2abcdb1))
+
 # [1.5.0](https://github.com/altamarluis/devops-tech-test/compare/v1.4.0...v1.5.0) (2026-01-21)
 
 
