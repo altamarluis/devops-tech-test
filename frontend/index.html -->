@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Check</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0px;
+      padding: 0px;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      font-size: 2rem; /* Increased font size */
+    }
+
+    #result {
+      font-size: 1.5rem; /* Slightly increased font size */
+      color: green; /* Changed text color to green */
+      margin-top: 20px; /* Adjusted margin to separate the result from the button */
+    }
+  </style>
+</head>
+<body>
+  <h1>App Status</h1>
+  <button onclick="check()">Check health</button>
+  <p id="result"></p>
+
+  <script>
+    async function check() {
+      try {
+        const r = await fetch("/health");
+        const data = await r.json();
+        
+        // Update the innerText only if response is successful
+        if (r.ok) {
+          document.getElementById("result").innerText = data.status;
+        } else {
+          document.getElementById("result").innerText = "Health check failed";
+          document.getElementById("result").style.color = "red";
+        }
+      } catch (error) {
+        console.error('Error fetching health info:', error);
+        document.getElementById("result").innerText = "Fetch failed";
+        document.getElementById("result").style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
