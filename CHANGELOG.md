@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/altamarluis/devops-tech-test/compare/v1.4.0...v1.5.0) (2026-01-21)
+
+
+### Features
+
+* add technical explanation report to ia fixes ([de78699](https://github.com/altamarluis/devops-tech-test/commit/de7869992a75f30f251f41c129a6135be5e462d6))
+
 # [1.4.0](https://github.com/altamarluis/devops-tech-test/compare/v1.3.0...v1.4.0) (2026-01-20)
 
 
