@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/altamarluis/devops-tech-test/compare/v1.6.1...v1.6.2) (2026-01-21)
+
+
+### Bug Fixes
+
+* add PyGithub dependency for ia agent ([e0a9712](https://github.com/altamarluis/devops-tech-test/commit/e0a971236c2a32d9e7add24690866d5f8d446eb0))
+
 ## [1.6.1](https://github.com/altamarluis/devops-tech-test/compare/v1.6.0...v1.6.1) (2026-01-21)
 
 
