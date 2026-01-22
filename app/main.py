@@ -5,7 +5,7 @@ from app.services import add_numbers
 app = FastAPI(title="DevOps Automation Test App")
 
 # Serve frontend (frontend/index.html)
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+app.mount("/static", StaticFiles(directory="frontend", html=True), name="frontend")
 
 @app.get("/health")
 def health():
