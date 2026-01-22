@@ -14,7 +14,7 @@ def capture():
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        page.goto("http://localhost:8000")
+        page.goto("http://localhost:8000/static")
         page.screenshot(path="ia-artifacts/screenshot.png")
         browser.close()
 
